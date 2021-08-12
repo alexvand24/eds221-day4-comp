@@ -1,0 +1,179 @@
+---
+title: "Day 4 Interactive Session"
+author: "Alex Vand"
+date: "8/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+```
+
+## Code warm-up
+
+You run two miles, and these are your quarter mile splits (in minutes). Write a for loop that returns your total time for any two consecutive quarter miles.
+
+```{r}
+quarter_splits <- c(1.0, 1.1, 1.2, 1.1, 1.4, 1.5, 1.6, 1.4)
+half_splits <- vector(mode = "numeric", length = length(quarter_splits) - 1)
+
+for(i in 1:(length(quarter_splits) - 1)) {
+  half_splits[i] <- quarter_splits[i] + quarter_splits[i + 1]
+}
+
+half_splits
+```
+
+## Basic function structure practice
+
+```{r}
+birddog_sum <- function(bird, dog) {
+  
+  if(bird > 50) {
+    stop("Birds cannot exceed 50.")
+  }
+  
+  if(bird < 10) {
+    message("Cool little bird!")
+  }
+  
+  if(dog < 0) {
+    warning("Can dog value be negative?")
+  }
+  
+  add_birddog <- bird + dog
+  return(add_birddog)
+}
+
+
+bird100_dog5 <- birddog_sum(bird = 7, dog = -5)
+bird100_dog5
+
+# birddog_sum(bird = "hawk", dog = 10) # error due to string input
+```
+
+```{r}
+say_hello <- function(friend, weekday) {
+  print(paste("Hello,", friend, "have a great", weekday))
+}
+
+say_hello(friend = "Teddy", weekday = "Thursday")
+
+```
+
+### Print vs. return example
+
+```{r}
+find_multiple <- function(a,b) {
+  my_multiplication <- a * b
+  print(my_multiplication)
+}
+
+find_multiple(a = 10, b = 6) + 12
+# in py, this would return an error message
+```
+
+### Functions with conditions
+
+```{r}
+animal_age <- function(animal, age) {
+  
+  if(!animal %in% c("dog", "goat")) {
+    stop("Animal must be a dog or a goat.")
+  }
+  
+  if(animal == "dog") {
+    creature_age <- age * 7
+  }
+  
+  else if(animal == "goat") {
+    creature_age <- age * 4.7
+  }
+  
+  return(creature_age)
+}
+
+animal_age(animal = "goat", age = 13)
+# animal_age(animal = "zebra", age = 66)
+```
+
+### Using the in operator
+
+```{r}
+adelie_gentoo <- penguins %>% 
+  filter(species %in% c("Adelie", "Gentoo"))
+```
+
+
+Wrong example:
+
+```{r}
+adelie_gentoo_wrong <- penguins %>% 
+  filter(species == c("Adelie", "Gentoo"))
+```
+
+
+### Functions with for loops
+
+```{r}
+df_means <- function(df) {
+  for(i in 1:ncol(df)) {
+    col_mean <- mean(df[[i]], na.rm = TRUE)
+    print(col_mean)
+  }
+}
+# colnames(df[i]) will return that column name as a string
+
+df_means(df = mtcars)
+
+# Update this function so that for each iteration it returns a phrase "The mean value of _____ is _____."
+
+df_means <- function(df) {
+  for(i in 1:ncol(df)) {
+    col_mean <- mean(df[[i]], na.rm = TRUE)
+    print(paste("The mean value of", colnames(df[i]), "is", col_mean))
+  }
+}
+```
+
+
+Make a subset of only structural size variables from the penguins dataset for Chinstrap
+
+```{r}
+chinstrap_sizes <- penguins %>% 
+  filter(species == "Chinstrap") %>% 
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+
+df_means(df = chinstrap_sizes)
+```
+
+## Condition to check class of an input
+
+```{r}
+lunchtime <- function(tacos, price_per) {
+  
+  if(is.numeric(tacos) == FALSE) {
+    stop("You must input a number of tacos.")
+  }
+  
+  tot_price <- tacos * price_per
+  return(tot_price)
+}
+
+lunchtime(tacos = 3, price_per = 2.50)
+# lunchtime(tacos = "chicken", price_per = 2.50)
+```
+
+
+
+
+
+
+
+
+
+
+
+
